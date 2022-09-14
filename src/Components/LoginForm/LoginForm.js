@@ -1,44 +1,59 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  auth,
+  logInWithEmailAndPassword,
+  signInWithGoogle,
+} from "../../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import "./LoginForm.css";
 
-import { useAuth } from "../../context/AuthContext";
-
-const LoginForm = () => {
-  const [emailValue, setEmailValue] = useState("");
-  const [passwordValue, setPasswordValue] = useState("");
-  const auth = useAuth();
-  let navigate = useNavigate;
-
+function LoginForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (loading) {
+      // maybe trigger a loading screen
+      return;
+    }
+    if (user) navigate("/webapp");
+  }, [user, loading]);
   return (
-    <div className="formContainer" margin-top="20px">
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          auth.signin({
-            email: emailValue,
-            password: passwordValue,
-            callback: () => navigate("/webapp"),
-          });
-        }}
-      >
-        <label>What is your email?</label>
+    <div className="login">
+      <div className="login__container">
         <input
-          type="email"
-          placeholder="Email"
-          value={emailValue}
-          onChange={(event) => setEmailValue(event.target.value)}
+          type="text"
+          className="login__textBox"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="E-mail Address"
         />
-        <label>Please select a password</label>
         <input
           type="password"
+          className="login__textBox"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-          value={passwordValue}
-          onChange={(event) => setPasswordValue(event.target.value)}
         />
-        <button type="submit">Login</button>
-      </form>
+        <button
+          className="login__btn"
+          onClick={() => logInWithEmailAndPassword(email, password)}
+        >
+          Login
+        </button>
+        <button className="login__btn login__google" onClick={signInWithGoogle}>
+          Login with Google
+        </button>
+        <div>
+          <Link to="/reset">Forgot Password</Link>
+        </div>
+        <div>
+          Don't have an account? <Link to="/signup">Sign up</Link> now.
+        </div>
+      </div>
     </div>
   );
-};
-
+}
 export default LoginForm;

@@ -1,7 +1,12 @@
 import React from "react";
+import "./WebApp.css";
 
 const WebApp = () => {
-  return <h1>just some words.</h1>;
+  return (
+    <div className="container">
+      <h1>just some words.</h1>;
+    </div>
+  );
 };
 
 export default WebApp;
