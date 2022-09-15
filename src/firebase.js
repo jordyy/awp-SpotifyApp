@@ -16,6 +16,7 @@ import {
   where,
   addDoc,
 } from "firebase/firestore";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDFwBFGWmEehVYHXVh7bGYMnec7sYaNo7U",
   authDomain: "spotifyapp-d648e.firebaseapp.com",
@@ -28,6 +29,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
+
+//Google auth
 const signInWithGoogle = async () => {
   try {
     const res = await signInWithPopup(auth, googleProvider);
@@ -47,6 +50,8 @@ const signInWithGoogle = async () => {
     alert(err.message);
   }
 };
+
+//login directly to site
 const logInWithEmailAndPassword = async (email, password) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
@@ -55,6 +60,8 @@ const logInWithEmailAndPassword = async (email, password) => {
     alert(err.message);
   }
 };
+
+//register with email & pass
 const registerWithEmailAndPassword = async (name, email, password) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -70,6 +77,8 @@ const registerWithEmailAndPassword = async (name, email, password) => {
     alert(err.message);
   }
 };
+
+//need to FIX reset -- add back into ROUTES
 const sendPasswordReset = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email);

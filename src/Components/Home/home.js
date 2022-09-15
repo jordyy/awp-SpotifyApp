@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
-import { auth, db, logout } from "../../firebase";
-import { signOut } from "firebase/auth";
+import React, { useState, useContext } from "react";
+import { auth, logout } from "../../firebase";
 import { AuthContext } from "../../AuthProvider";
 import "./home.css";
 import { useNavigate } from "react-router-dom";
-import { ref, onValue } from "firebase/database";
 import { Link } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -16,16 +14,9 @@ function Home() {
 
   const navigate = useNavigate();
 
-  const clickLogin = () => {
-    if (currentUser) {
-      signOut(auth);
-    } else {
-      navigate("/login");
-    }
-  };
-
-  const clickSignup = () => {
-    navigate("/signup");
+  const handleSignout = () => {
+    logout();
+    navigate("/");
   };
 
   return (
@@ -35,7 +26,7 @@ function Home() {
           <Link to="/webapp">
             <li>Open Web App</li>
           </Link>
-          <li onClick={logout}>Logout</li>
+          <li onClick={handleSignout}>Logout</li>
         </ul>
       )}
 
